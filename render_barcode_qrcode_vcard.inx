@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+  <name>vCard QR Code</name>
+  <id>de.vektorrascheln.qrcode.vcard</id>
+  <label>Extension for creating QR Codes in vCard 4.0 format.</label>
+  
+  <param name="nb" type="notebook">
+    <page name="person" gui-text="Person">
+      <param name="name" type="string" gui-description="e.g. Mary van de Namen" gui-text="Full name (required):"></param>
+      <param name="fname" type="string" gui-description="e.g. Mary" gui-text="First name:"></param>
+      <param name="mname" type="string" gui-description="e.g. Janice Jennifer" gui-text="Middle name:"></param>
+      <param name="surname" type="string" gui-description="e.g. van de Namen" gui-text="Last name:"></param>
+      <param name="nick" type="string" gui-description="e.g. Nicki the Great"  gui-text="Nickname:"></param>
+      <param name="prefix" type="string" gui-text="Name prefix:" gui-description="e.g. Capt., Prof.,..."></param>
+      <param name="suffix" type="string" gui-text="Name suffix:" gui-description="e.g. PhD, MD,..."></param>
+      <param name="birthday" type="string" gui-description="Formatted like this: YYYYMMDD, e.g. 19700423" gui-text="Date of birth:"></param>
+      <param name="photo" type="string" gui-description="e.g. https://example.com/my_photo.jpg" gui-text="Photo URL:"></param>
+    </page>
+
+    <page name="home" gui-text="Home">
+      <param name="home_data" type="notebook">
+        <page name="home_contact" gui-text="Contact">
+          <param name="phone_h" type="string" gui-description="e.g. +49 01234 123456" gui-text="Phone:"></param>
+          <param name="email_h" type="string" gui-description="e.g. me@example.com" gui-text="Email:"></param>
+          <param name="website_h" type="string" gui-description="e.g. https://example.com" gui-text="Website:"></param>
+          <param name="key_h" type="string" gui-description="e.g. https://example.com/key.pgp" gui-text="GPG public key URL:"></param>
+        </page>
+
+        <page name="home_address" gui-text="Address">
+          <param name="pobox_h" type="string" gui-description="e.g. 12345 (note: leave blank if QR code doesn't work. Some readers cannot deal with this)" gui-text="Post office box:"></param>
+          <param name="add_extra_h" type="string" gui-description="e.g. Apartment 32B (note: leave blank if QR code doesn't work. Some readers cannot deal with this)" gui-text="Address extra:"></param>
+          <param name="street_h" type="string" gui-description="e.g. Main Street 123" gui-text="Street and house number:"></param>
+          <param name="city_h" type="string" gui-description="e.g. Nairobi" gui-text="City:"></param>
+          <param name="state_h" type="string" gui-description="e.g. CA" gui-text="State/Province:"></param>
+          <param name="postcode_h" type="string" gui-description="e.g. 12345" gui-text="Postal code:"></param>
+          <param name="country_h" type="string" gui-description="e.g. Kenia" gui-text="Country:"></param>
+        </page>
+
+      </param>
+    </page>
+
+    <page name="work" gui-text="Work">
+      <param name="work_data" type="notebook">
+        <page name="work_general" gui-text="General">
+          <param name="org" type="string" gui-description="e.g. My Great Business" gui-text="Organization:"></param>
+          <param name="title" type="string" gui-description="Job title, functional position or function within the organization, e.g. Senior Interface Designer" gui-text="Job title:"></param>
+          <param name="logo" type="string" gui-description="e.g. https://example.com/logo.png" gui-text="Logo URL:"></param>
+        </page>
+      
+        <page name="work_contact" gui-text="Contact">
+          <param name="phone_w" type="string" gui-description="e.g. +49 01234 123456" gui-text="Phone:"></param>
+          <param name="email_w" type="string" gui-description="e.g. contact@example.com" gui-text="E-mail:"></param>
+          <param name="website_w" type="string" gui-description="e.g. https://example.com" gui-text="Website:"></param>
+          <param name="key_w" type="string" gui-description="e.g. https://example.com/key.pgp" gui-text="GPG key URL:"></param>
+        </page>
+
+        <page name="work_address" gui-text="Address">
+          <param name="pobox_w" type="string" gui-description="e.g. 12345 (note: leave blank if QR code doesn't work. Some readers cannot deal with this)" gui-text="Post office box:"></param>
+          <param name="add_extra_w" type="string" gui-text="Address extra:" gui-description="e.g. House C (note: leave blank if QR code doesn't work. Some readers cannot deal with this)"></param>
+          <param name="street_w" type="string" gui-description="e.g. Main Street 123" gui-text="Street and house number:"></param>
+          <param name="city_w" type="string" gui-description="e.g. Nairobi" gui-text="City:"></param>
+          <param name="state_w" type="string" gui-description="e.g. CA" gui-text="State/Province:"></param>
+          <param name="postcode_w" type="string" gui-description="e.g. 12345" gui-text="Postal code:"></param>
+          <param name="country_w" type="string" gui-description="e.g. Kenia" gui-text="Country:"></param>
+        </page>
+      </param>
+    </page>
+
+    <page name="code_info" gui-text="QR Code">
+      <param name="correctionlevel" type="optiongroup" appearance="combo" gui-text="Error correction level:">
+        <item value="1">L (Approx. 7%)</item>
+        <item value="0">M (Approx. 15%)</item>
+        <item value="3">Q (Approx. 25%)</item>
+        <item value="2">H (Approx. 30%)</item>
+      </param>  
+      <param name="modulesize" type="int" min="0" max="1000" gui-text="Square size (px):">4</param>
+    </page>
+  </param>
+
+  <param name="print" type="boolean" gui-text="Display vCard info" gui-description="Display vCard as text message, so it can be copied">false</param>
+  <label>For more details, see:</label>
+  <label indent="1" appearance="url">http://www.denso-wave.com/qrcode/index-e.html</label>
+  <label indent="1" appearance="url">https://en.wikipedia.org/wiki/VCard</label>
+
+  <effect>
+    <object-type>all</object-type>
+    <effects-menu>
+      <submenu name="Render">
+        <submenu name="Barcode" />
+      </submenu>
+    </effects-menu>
+  </effect>
+  <script>
+    <command location="inx" interpreter="python">render_barcode_qrcode_vcard.py</command>
+  </script>
+</inkscape-extension>
