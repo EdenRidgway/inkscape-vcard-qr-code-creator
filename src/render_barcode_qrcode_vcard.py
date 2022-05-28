@@ -1,80 +1,26 @@
 #!/usr/bin/env python
+# coding=utf-8
 
 import inkex
 import re
 import validators
 import datetime
+from render_barcode_qrcode import QrCode, QR8BitByte, QRCode, GridDrawer
 
 # The word "QR Code" is registered trademark of
 # DENSO WAVE INCORPORATED
 #   http://www.denso-wave.com/qrcode/faqpatent-e.html
 
+# vCard 4.0 Standard
 # https://datatracker.ietf.org/doc/html/rfc6350
 
-# The CHARSET parameter is no longer required as the vCard format now only supports one character set. Always UTF-8!
-# Individual lines within vCard are delimited by the [RFC5322] line
-#    break, which is a CRLF sequence (U+000D followed by U+000A).
-# A line that begins with a white space character is a continuation of
-#    the previous line, as described in Section 3.2.  The white space
-#    character and immediately preceeding CRLF should be discarded when
-#    reconstructing the original line.
-# NEWLINE (U+000A) characters in values MUST be
-#    encoded by two characters: a BACKSLASH followed by either an 'n'
-#    (U+006E) or an 'N' (U+004E).
-# FN
-#    Purpose:  To specify the formatted text corresponding to the name of
-#       the object the vCard represents.
-#    Value type:  A single text value.
-#    Cardinality:  1*
-#    Special notes:  This property is based on the semantics of the X.520
-#       Common Name attribute [CCITT.X520.1988].  The property MUST be
-#       present in the vCard object.
-#    Example:
-#          FN:Mr. John Q. Public\, Esq.
-# N
-#    Purpose:  To specify the components of the name of the object the
-#       vCard represents.
-#    Value type:  A single structured text value.  Each component can have
-#       multiple values.
-#    Cardinality:  *1
-#    Special note:  The structured property value corresponds, in
-#       sequence, to the Family Names (also known as surnames), Given
-#       Names, Additional Names, Honorific Prefixes, and Honorific
-#       Suffixes.  The text components are separated by the SEMICOLON
-#       character (U+003B).  Individual text components can include
-#       multiple text values separated by the COMMA character (U+002C).
-#       This property is based on the semantics of the X.520 individual
-#       name attributes [CCITT.X520.1988].  The property SHOULD be present
-#       in the vCard object when the name of the object the vCard
-#       represents follows the X.520 model.
-#    Examples:
-#              N:Public;John;Quinlan;Mr.;Esq.
-#              N:Stevenson;John;Philip,Paul;Dr.;Jr.,M.D.,A.C.P.
 
-# ADR     the post office box;
-#          the extended address (e.g., apartment or suite number);
-#          the street address;
-#          the locality (e.g., city);
-#          the region (e.g., state or province);
-#          the postal code;
-#          the country name (full name in the language specified in
-#          Section 5.1).
+class VCardQRCode(QrCode):
+    def __init__(self):
+        super().__init__()
 
-#       When a component value is missing, the associated component
-#       separator MUST still be specified.
-#       ADR;TYPE=work:;Suite D2-630;2875 Laurier;
-#      Quebec;QC;G1V 2M2;Canada
-
-# TYPE="home", TYPE="work"
-# REV:19951031T222710Z
-# VERSION:4.0 must come right after the start marker
-# URL
-# PHOTO;MEDIATYPE=image/jpeg:http://example.com/photo.jpg
-# LOGO;MEDIATYPE=image/png:http://example.com/logo.png
-# KEY;MEDIATYPE=application/pgp-keys:http://example.com/key.pgp
-
-class VCardQRCode(inkex.Effect):
     def add_arguments(self, pars):
+        super().add_arguments(pars)
 
         # Person
         pars.add_argument("--name", default="",
@@ -157,10 +103,6 @@ class VCardQRCode(inkex.Effect):
                           help="Country, e.g. Kenia")
 
         # Options
-        pars.add_argument("--correctionlevel", default="", type=int,
-                          help="Error correction level, values: 1 (Approx. 7%), 0 (Approx. 15%), 3 (Approx. 25%), 2 (Approx. 30%)")
-        pars.add_argument("--modulesize", default="4", type=int,
-                          help="Square size (px)")
         pars.add_argument("--print", default=False, type=inkex.Boolean,
                           help="Display vCard as text message, so it can be copied.")
 
@@ -275,6 +217,36 @@ class VCardQRCode(inkex.Effect):
         
         return vCard
 
+    def generate(self):
+
+        scale = self.svg.unittouu("1px")  # convert to document units
+        opt = self.options
+
+        if not opt.text:
+            raise inkex.AbortExtension(_("Please enter an input text"))
+
+        text_data = QR8BitByte(bytes(opt.text, "utf_8").decode("latin_1"))
+
+        grp = inkex.Group()
+        grp.set("inkscape:label", "vCard QR Code: " + self.options.name)
+
+        pos_x, pos_y = self.svg.namedview.center
+        grp.transform.add_translate(pos_x, pos_y)
+        if scale:
+            grp.transform.add_scale(scale)
+
+        # GENERATE THE QRCODE
+
+        # Automatic QR code size
+        code = QRCode.getMinimumQRCode(text_data, opt.correctionlevel)
+
+        self.boxsize = opt.modulesize
+        self.invert_code = opt.invert
+        self.margin = 4
+        self.draw = GridDrawer(opt.invert, opt.smoothval)
+        self.draw.set_grid(code.modules) 
+        self.render_svg(grp, opt.drawtype)
+        return grp
 
     def effect(self):
         
@@ -287,9 +259,22 @@ class VCardQRCode(inkex.Effect):
         vCard = self.build_vCard(standardized_name, home_address, work_address)
 
         # give result to QR code extension!
+        self.options.text=vCard
+        self.options.typenumber=0
+        self.options.qrmode=0
+        self.options.invert=False
+        self.options.modulesize=self.options.modulesize
+        self.options.drawtype="smooth"
+        self.options.smoothness="neutral"
+        self.options.pathtype="simple"
+        self.options.smoothval=0.2
+        self.options.symbolid=""
+        self.options.groupid=""
 
         if self.options.print:
             inkex.utils.debug(vCard)
+
+        super().effect()
             
 if __name__ == '__main__':
     VCardQRCode().run()
