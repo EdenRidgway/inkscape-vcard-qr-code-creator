@@ -29,14 +29,14 @@ and relaunch Inkscape.
 
 ## Screenshots
 
-![Person info](examples/person.png)
-![Personal - Contact info](examples/home_1.png)
-![Personal - Address](examples/home_2.png)
-![Work - General info](examples/work_1.png)
-![Work - Contact info](examples/work_2.png)
-![Work - Address](examples/work_3.png)
-![QR Code options](examples/qr_options.png)
-![QR Code Example](examples/qrcode_example.png)
+![Person info](screenshots/person.png)
+![Personal - Contact info](screenshots/home_1.png)
+![Personal - Address](screenshots/home_2.png)
+![Work - General info](screenshots/work_1.png)
+![Work - Contact info](screenshots/work_2.png)
+![Work - Address](screenshots/work_3.png)
+![QR Code options](screenshots/qr_options.png)
+![QR Code Example](screenshots/qrcode_example.png)
 
 ## License
 
