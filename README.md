@@ -37,6 +37,7 @@ and relaunch Inkscape.
 ![Work - Address](screenshots/work_3.png)
 ![QR Code options](screenshots/qr_options.png)
 ![QR Code Example](screenshots/qrcode_example.png)
+![vCard text](screenshots/vCard_text.png)
 
 ## License
 
