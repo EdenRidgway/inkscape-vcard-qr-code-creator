@@ -1,5 +1,8 @@
 # vCard QR Code Creator Inkscape extension
 
+
+![Symbol image](vCard.png)
+
 This Inkscape extension creates **QR codes** that contain your personal **business card information** in a standardized machine readable format ([vCard 4.0](https://en.wikipedia.org/wiki/VCard)), so you can **quickly share your info** by just letting another person scan your QR code with their mobile phone, e.g. when meeting people at a conference or business fair.
 
 It contains fields for both **private** and **business** information.
