@@ -130,12 +130,12 @@ class VCardQRCode(QrCode):
             
             # email validation
             if opt.startswith('email'):
-                if val and not validators.is_email(val):
+                if val and not validators.email(val):
                     inkex.errormsg(f"{val} is not a valid email address!")
 
             # url validation
             if opt in ["photo", "website_h", "key_h", "logo", "website_w", "key_w"]:
-                if val and not validators.is_url(val, public=True):
+                if val and not validators.url(val, public=True):
                     inkex.errormsg(f"{val} is not a valid internet address!")
         
         # name must be given
