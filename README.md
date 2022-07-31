@@ -15,9 +15,33 @@ Inspired by [Sergey Vedernikov's vCard QR Code generator extension](https://inks
 
 ## Installation
 
+### Dependencies
+Ensure that you have the required python packages installed:
+* pip install inkex
+* pip install validators
+* pip install daal4py
+* pip install scipy
+* pip install numba
+* pip install numpy
+
+### Inkscape Setup
 Copy the files in the src/ directory into the user extensions
 directory (see 'Inkscape Preferences > System' for the exact location)
 and relaunch Inkscape.
+
+### Setup on Windows 
+
+On windows you might need to updated the [python interpretor for inkscape](https://inkscape.gitlab.io/extensions/documentation/authors/interpreters.html) to point to your locally installed version. You can do this by:
+* Opening Inkscape and going to Tools -> Preferences -> System
+* Find the location of the preferences.xml file in the "User preferences" entry. This probably will looks something like this C:\Users\\(UserName)\AppData\Roaming\inkscape\preferences.xml.
+* Open this file and find the group element with the id extensions. Add the attribubute python-interpreter with the full path to your python.exe. For example:
+```xml
+  <group
+     id="extensions"
+     python-interpreter="C:\ProgramData\Anaconda3\python.exe"
+```
+
+If you run into issues with numpy you might need to uninstall and reinstall it.
 
 ## Usage
 
